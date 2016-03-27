@@ -1,0 +1,13 @@
+<ion-view view-title="Browse">
+  <ion-content>
+    <h1>NFC Bitches</h1>
+    <button ng-click="listenForTag()">Start NFC</button>
+    <button ng-click="stopListeningForTag()">Stop NFC</button><br>
+    <div>
+		Message:<input ng-model="message" ng-if="writeToTag"><input type="checkbox" ng-model="writeToTag">
+    </div><br>
+    <div>
+
+    <h3>{{currState}}</h3>
+  </ion-content>
+</ion-view>

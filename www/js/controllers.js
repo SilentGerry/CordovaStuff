@@ -90,28 +90,50 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {})
 
-.controller('SearchCtrl', function($ionicPlatform, $scope, $cordovaCapture) {
-    /**
+.controller('SearchCtrl', function($ionicPlatform, $scope, $cordovaCapture, $cordovaFile) {
     $ionicPlatform.ready(function() {
-        var tesseractjs = require('')
         $scope.captureImageToProcess = function() {
-          var options = {limit:3,};
-          $cordovaCapture.captureImage(options).then(function(imageData) {
-            Tesseract.recognize(imageData, function(err, result) {
-              if(err) {
-                console.log('Issue recnozing the image text...');
+            var options = { limit: 1, };
+            $scope.picTaken = false;
+            console.log(OCRAD.version());
+            $cordovaCapture.captureImage(options).then(function(imageData) {
+                console.log('Image capture successfull...');
+                console.log(imageData[0]);
+                $cordovaFile.checkFile(cordova.file.externalRootDirectory, 'Pictures/' + imageData[0].name)
+                    .then(function(sucess) {
+                        console.log('The file is there...');
+                        console.log(sucess);
+                        $scope.thePicture = sucess.nativeURL;
+                        $scope.picTaken = true;
+                        console.log('Creating image...');
+                        img = new Image();
+                        img.src = sucess.nativeURL;
+                        img.onload = function() {
+                            console.log('Image loaded...');
+                            console.log(this);
+                            console.log('Creating canvas...');
+                            var canvas = document.createElement('canvas');
+                            canvas.width = this.naturalWidth;
+                            canvas.height = this.naturalHeight;
+                            var context = canvas.getContext('2d');
+                            context.drawImage(this, 0, 0);
+                            console.log(canvas.getImageData);
+                            console.log(context.getImageData);
+                            var theText = OCRAD(context);
+                            console.log('The text: ' + theText);
+                            $scope.imageText = theText;
+                            $scope.$apply();
+                        };
+                    }, function(err) {
+                        console.log('The file is not where we looked...');
+                        console.error(err);
+                    });
+            }, function(err) {
+                console.log('Ran into an issue...');
                 console.error(err);
-                return;
-              }
-              result.text;
             });
-          }, function(err) {
-            console.log('Ran into an issue...');
-            console.error(err);
-          });
         };
     });
-    */
 })
 
 .controller('NFCCtrl', function($scope, $ionicPlatform, $cordovaDevice) {
@@ -119,6 +141,7 @@ angular.module('starter.controllers', [])
         console.log('Page loaded...');
         $scope.currState = 'Just started';
         $scope.message = 'Message';
+        $scope.writeToTag = false;
         var tagsWritten = 1;
 
         function ndefListenerCB(nfcEv) {
@@ -127,8 +150,9 @@ angular.module('starter.controllers', [])
             $scope.currState = 'Read NDEF';
             $scope.$apply();
         }
+
         function doIwrite() {
-          return $scope.writeToTag;
+            return $scope.writeToTag;
         }
 
         function tagListenerCB(nfcEv) {
@@ -137,7 +161,7 @@ angular.module('starter.controllers', [])
             $scope.currState = 'Read Tag';
             $scope.$apply();
             console.log($scope.writeToTag);
-            if (doIwrite()) {
+            if (doIwrite() === true) {
                 console.log('Entering write code...');
                 var payload = [ndef.textRecord('$scope.message'), ndef.textRecord('Tag Write: ' + tagsWritten)];
                 nfc.write(payload,
@@ -196,5 +220,11 @@ angular.module('starter.controllers', [])
                 });
             $scope.currState = 'Not listening'
         };
+    });
+})
+
+.controller('DragDropUrl', function($scope, $ionicPlatform) {
+    $ionicPlatform.ready(function() {
+
     });
 });

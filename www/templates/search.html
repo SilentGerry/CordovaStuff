@@ -1,6 +1,8 @@
 <ion-view view-title="Search">
-  <ion-content>
-  	<button ng-click="captureImageToProcess()">Image</button>
-    <h1>{{imageText}}</h1>
-  </ion-content>
+    <ion-content>
+       
+        <button ng-click="captureImageToProcess()">Image</button>
+        <h1>{{imageText}}</h1>
+        <img id="upPic" ng-src="{{thePicture}}" height="30%" width="30%" ng-if="picTaken">
+    </ion-content>
 </ion-view>

@@ -1,5 +1,44 @@
 <ion-view view-title="Drag and Drop">
-  <ion-content>
-    <h1>Drag and Drop</h1>
-  </ion-content>
+    <ion-content>
+        <h1>Drag and Drop</h1>
+        <div class="floatLeft">
+            <tg-dynamic-directive ng-model="rootItem" tg-dynamic-directive-view="getView">
+            </tg-dynamic-directive>
+            <div style="clear: both;"></div>
+        </div>
+        <!--Card area (Packet)-->
+        <md-content ui-sortable="sortableOptions" flex="80" layout-align="center center">
+            <div class="sortable" id=layout="row" layout-wrap>
+                <!--Cards-->
+                <div ng-repeat="i in cards">
+                    <md-card>
+                        <md-card-header>
+                            <md-card-header-text>
+                                <span class="md-title">Title</span>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content>
+                            <div ui-sortable="dropzone" ng-model="i.myLoc">
+                            </div>
+                        </md-card-content>
+                        <md-card-actions>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+        </md-content>
+        <!--Item Tree-->
+        <div layout="column" flex="20">
+            <md-list ui-sortable="sortableOptions" class="sortable">
+                <div ng-repeat="pitems in itemTree">
+                    <md-list-item flex="100" ng-click="display = !display">
+                        {{pitems.title}}
+                    </md-list-item>
+                    <md-list-item layout-align="center center" flex="100" ng-repeat="sitems in pitems.items" ng-if="display">
+                        {{sitems.title}}
+                    </md-list-item>
+                </div>
+            </md-list>
+        </div>
+    </ion-content>
 </ion-view>

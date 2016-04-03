@@ -5184,7 +5184,7 @@ angular.module('ngCordova.plugins.media', [])
 
 .service('NewMedia', ['$q', '$interval', function ($q, $interval) {
   var q, q2, q3, mediaStatus = null, mediaPosition = -1, mediaTimer, mediaDuration = -1;
-
+  console.log($q);
   function setTimer(media) {
       if (angular.isDefined(mediaTimer)) {
         return;
@@ -5240,6 +5240,7 @@ angular.module('ngCordova.plugins.media', [])
             resetValues();
             q.reject(error);
         }, function (status) {
+            console.log('NewMedia');
             mediaStatus = status;
             q.notify({status: mediaStatus});
         });

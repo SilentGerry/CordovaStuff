@@ -45,7 +45,12 @@ angular.module('starter.controllers', [])
     $ionicPlatform.ready(function() {
         $scope.$apply();
 
+        var src = 'audio.mp3';
+        var media = null;
+
         $scope.captureAudio = function() {
+            media.pause();
+            /*
             var options = { limit: 3, duration: 10 };
             $cordovaCapture.captureAudio(options).then(function(audioData) {
                 console.log('Audio captured successfully');
@@ -53,10 +58,9 @@ angular.module('starter.controllers', [])
                 console.log('Audio capture failed');
                 console.error(err);
             });
+            */
         };
 
-        var src = 'audio.mp3';
-        var media = null;
         $scope.startCapture = function() {
             if (media != null) {
                 media.release();
@@ -92,6 +96,7 @@ angular.module('starter.controllers', [])
 
 .controller('SearchCtrl', function($ionicPlatform, $scope, $cordovaCapture, $cordovaFile) {
     $ionicPlatform.ready(function() {
+        console.log(cordova.file);
         $scope.captureImageToProcess = function() {
             var options = { limit: 1, };
             $scope.picTaken = false;
@@ -225,6 +230,6 @@ angular.module('starter.controllers', [])
 
 .controller('DragDropUrl', function($scope, $ionicPlatform) {
     $ionicPlatform.ready(function() {
-
+        
     });
 });
